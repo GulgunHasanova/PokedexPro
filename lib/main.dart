@@ -22,10 +22,10 @@ class PokedexApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Inter', // Assuming standard font, but can fallback
         colorScheme: const ColorScheme.dark(
-          primary: Colors.amber,
-          surface: Color(0xFF0F172A),
+          primary: AppColors.primary,
+          surface: AppColors.surface,
         ),
-        scaffoldBackgroundColor: const Color(0xFF0B1121),
+        scaffoldBackgroundColor: AppColors.scaffoldBackground,
         useMaterial3: true,
       ),
       home: const MainScreen(),
@@ -134,13 +134,13 @@ class _MainScreenState extends State<MainScreen> {
       if (_team.any((t) => t.id == p.id)) {
         _team.removeWhere((t) => t.id == p.id);
       } else {
-        if (_team.length < 6) {
+        if (_team.length < AppConstants.maxTeamSize) {
           _team.add(p);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              content: Text('Komandada artıq 6 Pokemon var!'),
-              backgroundColor: Colors.redAccent,
+              content: Text(AppStrings.teamFullMessage),
+              backgroundColor: AppColors.secondary,
               behavior: SnackBarBehavior.floating,
             ),
           );
@@ -183,9 +183,16 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget body;
+    return Scaffold(
+      appBar: _buildAppBar(),
+      body: SafeArea(child: _buildBody()),
+      bottomNavigationBar: _buildBottomNavigationBar(),
+    );
+  }
+
+  Widget _buildBody() {
     if (_currentIndex == 0) {
-      body = CatalogScreen(
+      return CatalogScreen(
         filteredPokemon: _filteredPokemon,
         isLoading: _isLoading,
         error: _error,
@@ -200,82 +207,74 @@ class _MainScreenState extends State<MainScreen> {
           _showFavoritesOnly = !_showFavoritesOnly;
           _applyFilters();
         },
-        onToggleShinyGlobal: () {
-          setState(() {
-            _isShinyGlobal = !_isShinyGlobal;
-          });
-        },
+        onToggleShinyGlobal: () => setState(() => _isShinyGlobal = !_isShinyGlobal),
         onToggleFavorite: _toggleFavorite,
         onToggleTeam: _toggleTeam,
         onSelectPokemon: _showDetails,
       );
     } else if (_currentIndex == 1) {
-      body = TeamBuilderScreen(
+      return TeamBuilderScreen(
         team: _team,
         onRemoveFromTeam: _toggleTeam,
         onSelectPokemon: _showDetails,
-        onOpenCatalog: () {
-          setState(() {
-            _currentIndex = 0;
-          });
-        },
+        onOpenCatalog: () => setState(() => _currentIndex = 0),
       );
     } else {
-      body = CompareScreen(
-        availablePokemon: _allPokemon,
-      );
+      return CompareScreen(availablePokemon: _allPokemon);
     }
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(colors: [Colors.amber, Colors.redAccent]),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
+  PreferredSizeWidget _buildAppBar() {
+    return AppBar(
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(6),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(colors: [AppColors.primary, AppColors.secondary]),
+              borderRadius: BorderRadius.circular(10),
             ),
-            const SizedBox(width: 8),
-            const Text(
-              'Pokedex',
-              style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 22),
-            ),
-            const Text(
-              'Pro',
-              style: TextStyle(fontWeight: FontWeight.w900, color: Colors.amber, fontSize: 22),
-            ),
-          ],
-        ),
-        backgroundColor: const Color(0xFF0F172A).withValues(alpha: 0.9),
-        elevation: 0,
-        centerTitle: false,
-      ),
-      body: SafeArea(child: body),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (i) => setState(() => _currentIndex = i),
-        backgroundColor: const Color(0xFF0F172A),
-        selectedItemColor: Colors.amber,
-        unselectedItemColor: Colors.white54,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.map),
-            label: 'Kataloq',
+            child: const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shield),
-            label: 'Komandam',
+          const SizedBox(width: 8),
+          const Text(
+            AppStrings.appTitlePart1,
+            style: TextStyle(fontWeight: FontWeight.w900, color: Colors.white, fontSize: 22),
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart),
-            label: 'Müqayisə',
+          const Text(
+            AppStrings.appTitlePart2,
+            style: TextStyle(fontWeight: FontWeight.w900, color: AppColors.primary, fontSize: 22),
           ),
         ],
       ),
+      backgroundColor: AppColors.surface.withValues(alpha: 0.9),
+      elevation: 0,
+      centerTitle: false,
+    );
+  }
+
+  Widget _buildBottomNavigationBar() {
+    return BottomNavigationBar(
+      currentIndex: _currentIndex,
+      onTap: (i) => setState(() => _currentIndex = i),
+      backgroundColor: AppColors.surface,
+      selectedItemColor: AppColors.primary,
+      unselectedItemColor: Colors.white54,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.map),
+          label: AppStrings.tabCatalog,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.shield),
+          label: AppStrings.tabTeam,
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.bar_chart),
+          label: AppStrings.tabCompare,
+        ),
+      ],
     );
   }
 }

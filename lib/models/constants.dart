@@ -86,3 +86,44 @@ final Map<String, StatDetail> statDetails = {
   'special-defense': const StatDetail(nameAz: 'Xüsusi Müdafiə', shortAz: 'S.DEF', color: Colors.indigo),
   'speed': const StatDetail(nameAz: 'Sürət', shortAz: 'SPD', color: Colors.amber),
 };
+
+class AppConstants {
+  static const int maxTeamSize = 6;
+}
+
+class AppColors {
+  static const Color surface = Color(0xFF0F172A);
+  static const Color scaffoldBackground = Color(0xFF0B1121);
+  static const Color primary = Colors.amber;
+  static const Color secondary = Colors.redAccent;
+}
+
+class AppStrings {
+  static const String appTitlePart1 = 'Pokedex';
+  static const String appTitlePart2 = 'Pro';
+  static const String teamFullMessage = 'Komandada artıq 6 Pokemon var!';
+  static const String tabCatalog = 'Kataloq';
+  static const String tabTeam = 'Komandam';
+  static const String tabCompare = 'Müqayisə';
+  static const String searchHint = 'Pokemon axtar (ad və ya ID)...';
+  static const String filterFavorites = 'Favoritlər';
+  static const String filterShiny = 'Shiny Mod';
+  static const String loadingMessage = 'Pokedex Yüklənir...';
+  static const String noResultsTitle = 'Nəticə Tapılmadı';
+  static const String noResultsDesc = 'Daxil etdiyiniz kriteriyalara uyğun pokemon tapılmadı.';
+  static const String vsText = 'VS';
+  static const String teamTitle = 'Komandam';
+  static const String teamSubtitle = 'Öz xəyalındakı komandanı qur (Maksimum 6 Pokemon)';
+  static const String noTeamTitle = 'Komanda Boşdur';
+  static const String noTeamDesc = 'Kataloqa gedərək komandanıza pokemon əlavə edin.';
+  static const String selectPokemonToCompare = 'Müqayisə etmək üçün Pokemon seçin';
+  static const String selectFirstPokemon = '1-ci Pokemonu Seçin';
+  static const String selectSecondPokemon = '2-ci Pokemonu Seçin';
+  static const String searchFirstPokemonHint = '1-ci pokemonu axtarın...';
+  static const String searchSecondPokemonHint = '2-ci pokemonu axtarın...';
+  static const String compareTitle = 'Pokemon Müqayisəsi';
+  static const String compareSubtitle = 'İki pokemon seçin və onların güclərini müqayisə edin.';
+  static const String compareNoPokemon = 'Müqayisə üçün pokemon yoxdur.';
+  static const String pokemon1Label = 'Pokemon 1';
+  static const String pokemon2Label = 'Pokemon 2';
+}
